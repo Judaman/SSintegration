@@ -1,8 +1,15 @@
+updateShipmentStatuses()
 function updateShipmentStatuses() {
 
-  var SSshippedOrders = getShippedSSOrders();
 
-  var shippedOrdersLength = SSshippedOrders.length;
+  var shippedSSorders = require('./getShippedSSorders').getShippedSSorders();
+shippedSSorders.then(function(shippedSSorders){
+console.log(shippedSSorders);
+
+});
+
+
+  /*var shippedOrdersLength = SSshippedOrders.length;
 
   for (var indexOfSSorders = 1; indexOfSSorders < shippedOrdersLength; indexOfSSorders++) {
 
@@ -48,5 +55,5 @@ try{var googleOrder = ShoppingContent.Orders.get(121694571, orderID)
     }
   }catch(err){Logger.log(err)}
 
-}
+}*/
 }

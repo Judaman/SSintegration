@@ -1,8 +1,10 @@
 const googleOrders = require('./getGMCorders').getGMCorders();
 const googleOrderToSSorder = require('./googleOrderToSSorder');
+const fetch = require('node-fetch');
+
 var ordersToSend = [];
 googleOrders.then(function(allGoogleOrders) {
-console.log(allGoogleOrders);
+  //console.log(allGoogleOrders[0].lineItems);
 
   allGoogleOrdersLength = allGoogleOrders.length;
   for (var indexOfGoogleOrders = 0; indexOfGoogleOrders < allGoogleOrdersLength; indexOfGoogleOrders++) {
@@ -13,24 +15,33 @@ console.log(allGoogleOrders);
 
     ordersToSend.push(newOrder)
   }
-  console.log(ordersToSend);
+  sendOrdersToSS(ordersToSend)
+})
 
-  //  sendOrdersToSS(ordersToSend);
+//console.log(ordersToSend[0].items);
 
-  function sendOrdersToSS(ordersToSend) {
-    var body = ordersToSend;
-    var Authorization = {
-      'Authorization': 'Basic ZGU4ZjlmM2I1ODE5NDlkYWIyYTczZmZhNzY1YzA2YzQ6ZGZmODQ4ZmNlMDgwNGEzZGE4ZTYwNmZjYWE5YTBiNDQ='
-    };
+async function sendOrdersToSS(ordersToSend) {
 
-    var options = {
-      'method': 'POST',
-      'contentType': 'application/json',
-      'headers': Authorization,
-      'payload': JSON.stringify(body)
-    };
-    var URL = "https://ssapi.shipstation.com/orders/createorders";
-    var response = UrlFetchApp.fetch(URL, options);
-    var JSONdata = JSON.parse(response); //.getContentText()
-  }
-});
+  var body = ordersToSend
+
+  console.log(body);
+
+  var url = "https://ssapi.shipstation.com/orders/createorders"; //up to 500 per request
+  var Authorization = {
+    'Authorization': 'Basic OTEwMzc3NzAyMDhlNGY2ODk1M2M4ZTc4N2JiOWE1Y2M6YTBlMGE3Njk0NzFkNDIxZDg3YzFjZjdjMDEwYmRkMDA='
+
+  };
+  var sentShippedSSorders = await fetch(url, {
+    method: 'POST',
+    headers: {'content-type': 'application/json','Authorization': 'Basic OTEwMzc3NzAyMDhlNGY2ODk1M2M4ZTc4N2JiOWE1Y2M6YTBlMGE3Njk0NzFkNDIxZDg3YzFjZjdjMDEwYmRkMDA='},
+    body: JSON.stringify(body),
+    accept: 'application/json',
+
+    //  payload:
+  }).then(response => {
+    return response;
+  }).catch(err => {
+    console.log(err);
+  });
+  console.log(sentShippedSSorders);
+};
