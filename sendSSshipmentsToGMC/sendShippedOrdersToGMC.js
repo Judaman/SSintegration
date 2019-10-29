@@ -12,8 +12,7 @@ function updateShipmentStatuses() {
     var carrier = order.serviceCode;
     var trackingNumber = order.trackingNumber;
 
-if(order.advancedOptions.mergedOrSplit){updateCombinedOrder(order,carrier,trackingNumber)}
- else{
+
 
 try{var googleOrder = ShoppingContent.Orders.get(121694571, orderID)
    // Logger.log(googleOrder.status);
@@ -48,6 +47,6 @@ try{var googleOrder = ShoppingContent.Orders.get(121694571, orderID)
       }
     }
   }catch(err){Logger.log(err)}
-}
+
 }
 }
