@@ -1,17 +1,28 @@
-const {google
-} = require('googleapis');
+module.exports = {
+  getGMCorders: async function() {
 
-const auth = require("./authorizeGMC").authorize();
 
-auth.then(async function getGMCorders(auth) {
-      console.log(auth);
-        const  orders = await google.content({
-          version: 'v2.1',
-          auth
-        }).orders.list({
-          merchantId: '121694571'
-        });
-        console.log(orders.data.resources);
-      }
-    );
-    //getGMCorders();
+    const {
+      google
+    } = require('googleapis');
+
+    const auth = require("./authorizeGMC").authorize();
+
+    var googleOrders;
+
+    await auth.then(async function getGMCorders(auth) {
+
+      const orders = await google.content({
+        version: 'v2.1',
+        auth
+      }).orders.list({
+        merchantId: '121694571',
+        maxResults: 3
+      });
+      //  console.log(orders.data.resources);
+
+      googleOrders = orders.data.resources;
+    })
+    return googleOrders;
+  } //getGMCorders();
+}
